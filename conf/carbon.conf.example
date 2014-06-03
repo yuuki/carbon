@@ -51,7 +51,7 @@ MAX_UPDATES_PER_SECOND = 500
 # If defined, this changes the MAX_UPDATES_PER_SECOND in Carbon when a
 # stop/shutdown is initiated.  This helps when MAX_UPDATES_PER_SECOND is
 # relatively low and carbon has cached a lot of updates; it enables the carbon
-# daemon to shutdown more quickly. 
+# daemon to shutdown more quickly.
 # MAX_UPDATES_PER_SECOND_ON_SHUTDOWN = 1000
 
 # Softly limits the number of whisper files that get created each minute.
@@ -99,6 +99,12 @@ LOG_CACHE_HITS = False
 # Set this option to True if you'd like to try this. Basically it will
 # shift the onus of buffering writes from the kernel into carbon's cache.
 WHISPER_AUTOFLUSH = False
+
+# On high workloads, OS page cache memory continues in/out disk and so unnecessary disk reads occur.
+# Set this option to False not to use write page cache.
+# It is passed to whisper file open option 'O_DIRECT'.
+# By default, this is on because 'write' system call generarry uses OS page cache.
+WHISPER_WRITE_PAGE_CACHE = True
 
 # By default new Whisper files are created pre-allocated with the data region
 # filled with zeros to prevent fragmentation and speed up contiguous reads and
@@ -315,7 +321,7 @@ PICKLE_RECEIVER_PORT = 2024
 
 # Filenames of the configuration files to use for this instance of aggregator.
 # Filenames are relative to CONF_DIR.
-# 
+#
 # AGGREGATION_RULES = aggregation-rules.conf
 # REWRITE_RULES = rewrite-rules.conf
 
@@ -325,7 +331,7 @@ PICKLE_RECEIVER_PORT = 2024
 # use multiple carbon-cache instances then it would look like this:
 #
 # DESTINATIONS = 127.0.0.1:2004:a, 127.0.0.1:2104:b
-# 
+#
 # The format is comma-delimited IP:PORT:INSTANCE where the :INSTANCE part is
 # optional and refers to the "None" instance if omitted.
 #
