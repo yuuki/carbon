@@ -101,10 +101,10 @@ LOG_CACHE_HITS = False
 WHISPER_AUTOFLUSH = False
 
 # On high workloads, OS page cache memory continues in/out disk and so unnecessary disk reads occur.
-# Set this option to False not to use write page cache.
-# It is passed to whisper file open option 'O_DIRECT'.
-# By default, this is on because 'write' system call generarry uses OS page cache.
-WHISPER_WRITE_PAGE_CACHE = True
+# Set this option to False not to use effective page cache.
+# It uses posix_fadvise(2) with POSIX_FADVISE_DONTNEED.
+# By default, this is off because we worry about CPU performance decrement due to system call increments.
+# WHISPER_EFFECTIVE_PAGE_CACHE = False
 
 # By default new Whisper files are created pre-allocated with the data region
 # filled with zeros to prevent fragmentation and speed up contiguous reads and

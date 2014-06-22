@@ -48,7 +48,7 @@ defaults = dict(
   WHISPER_SPARSE_CREATE=False,
   WHISPER_FALLOCATE_CREATE=False,
   WHISPER_LOCK_WRITES=False,
-  WHISPER_WRITE_PAGE_CACHE=True,
+  WHISPER_EFFECTIVE_PAGE_CACHING=False,
   MAX_DATAPOINTS_PER_MESSAGE=500,
   MAX_AGGREGATION_INTERVALS=5,
   MAX_QUEUE_SIZE=1000,
@@ -239,9 +239,9 @@ class CarbonCacheOptions(usage.Options):
             else:
                 log.err("WHISPER_LOCK_WRITES is enabled but import of fcntl module failed.")
 
-        if not settings.WHISPER_WRITE_PAGE_CACHE:
-            log.msg("Disabling Whisper write page caching")
-            whisper.WRITE_PAGE_CACHE=False
+        if settings.WHISPER_EFFECTIVE_PAGE_CACHING:
+            log.msg("Enabling Whisper effective page caching")
+            whisper.EFFECTIVE_PAGE_CACHING = True
 
         if not "action" in self:
             self["action"] = "start"
