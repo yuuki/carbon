@@ -49,6 +49,7 @@ defaults = dict(
   WHISPER_SPARSE_CREATE=False,
   WHISPER_FALLOCATE_CREATE=False,
   WHISPER_LOCK_WRITES=False,
+  WHISPER_FADVISE_RANDOM=False,
   MAX_DATAPOINTS_PER_MESSAGE=500,
   MAX_AGGREGATION_INTERVALS=5,
   FORWARD_ALL=False,
@@ -222,6 +223,16 @@ class CarbonCacheOptions(usage.Options):
                 log.msg("Enabling Whisper fallocate support")
             else:
                 log.err("WHISPER_FALLOCATE_CREATE is enabled but linking failed.")
+
+        if settings.WHISPER_FADVISE_RANDOM:
+            try:
+                if whisper.CAN_FADVISE:
+                    log.msg("Enabling Whisper fadvise_random support")
+                    whisper.FADVISE_RANDOM = True
+                else:
+                    log.err("WHISPER_FADVISE_RANDOM is enabled but import of ftools module failed.")
+            except AttributeError:
+                log.err("WHISPER_FADVISE_RANDOM is enabled but skipped because it is not compatible with the version of Whisper.")
 
         if settings.WHISPER_LOCK_WRITES:
             if whisper.CAN_LOCK:
